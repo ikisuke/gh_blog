@@ -6,6 +6,7 @@ on:
       - main
 
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -22,5 +23,17 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy GitHub Pages site
-        uses: actions/deploy-pages@v4.0.5
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
+
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+  
+      # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+  
+      # Specify runner + deployment step
